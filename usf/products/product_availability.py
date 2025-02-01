@@ -35,3 +35,6 @@ class ProductAvailability:
 
     def free(self) -> None:
         self._reservation = Reservation.empty()
+
+    def is_reserved(self) -> bool:
+        return self._reservation.is_reserved()

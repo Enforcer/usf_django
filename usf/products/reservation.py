@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Self
 
 from utils.user_id import UserId
@@ -29,7 +29,7 @@ class Reservation:
         return (
             self._reserved_for == user_id
             or self._reserved_until is None
-            or self._reserved_until < datetime.now()
+            or self._reserved_until < datetime.now(timezone.utc)
         )
 
     def __repr__(self) -> str:
@@ -40,3 +40,9 @@ class Reservation:
             self.reserved_for,
             self.reserved_until,
         ) == (other.reserved_for, other.reserved_until)
+
+    def is_reserved(self) -> bool:
+        return (
+            self._reserved_until is not None
+            and self._reserved_until >= datetime.now(timezone.utc)
+        )

@@ -15,14 +15,7 @@ class ProductAvailabilityRepository:
         except ProductAvailabilityModel.DoesNotExist:
             raise NotFound
         else:
-            reserved_for = None if model.reserved_for is None else model.reserved_for.id
-            return ProductAvailability(
-                product_id=model.product_id,
-                reservation=Reservation(
-                    reserved_for=reserved_for,
-                    reserved_until=model.reserved_until,
-                ),
-            )
+            return self.from_model(model)
 
     def save(self, product_availability: ProductAvailability) -> None:
         model = ProductAvailabilityModel(
@@ -34,3 +27,13 @@ class ProductAvailabilityRepository:
 
     def delete(self, product_id: ProductId) -> None:
         ProductAvailabilityModel.objects.filter(pk=product_id).delete()
+
+    def from_model(self, model: ProductAvailabilityModel) -> ProductAvailability:
+        reserved_for = None if model.reserved_for is None else model.reserved_for.id
+        return ProductAvailability(
+            product_id=model.product_id,
+            reservation=Reservation(
+                reserved_for=reserved_for,
+                reserved_until=model.reserved_until,
+            ),
+        )

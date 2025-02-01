@@ -25,10 +25,6 @@ def reserve_product(product_id: ProductId, for_: UserId) -> None:
     )
     repository.save(product_availability)
 
-    product = Product.objects.get(pk=product_id)
-    product.status = "reserved"
-    product.save()
-
 
 def mark_as_sold(product_id: ProductId) -> None:
     repository = ProductAvailabilityRepository()

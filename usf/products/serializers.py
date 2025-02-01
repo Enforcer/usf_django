@@ -4,11 +4,13 @@ from rest_framework import serializers
 from utils import insurance_fee as insurance_fee_utils
 
 from products.models import Product
+from products.product_availability_repository import ProductAvailabilityRepository
 
 
 class ProductSerializer(serializers.ModelSerializer[Product]):
     insurance_fee = serializers.SerializerMethodField()
     price_with_insurance = serializers.SerializerMethodField()
+    effective_status = serializers.SerializerMethodField()
 
     class Meta:
         model = Product
@@ -20,6 +22,7 @@ class ProductSerializer(serializers.ModelSerializer[Product]):
             "price_currency",
             "category",
             "status",
+            "effective_status",
             "insurance_fee",
             "price_with_insurance",
         ]
@@ -32,6 +35,14 @@ class ProductSerializer(serializers.ModelSerializer[Product]):
             obj.price
         )
         return str(price_with_insurance.amount)
+
+    def get_effective_status(self, obj: Product) -> str:
+        if obj.status == "available":
+            repository = ProductAvailabilityRepository()
+            product_availability = repository.from_model(obj.productavailabilitymodel)
+            return "reserved" if product_availability.is_reserved() else obj.status
+        else:
+            return obj.status
 
     def create(self, validated_data: dict[str, Any]) -> Product:
         validated_data["created_by"] = self.context["request"].user

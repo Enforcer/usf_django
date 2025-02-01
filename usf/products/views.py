@@ -1,4 +1,6 @@
-from django.db.models import QuerySet
+from datetime import datetime, timezone
+
+from django.db.models import Q, QuerySet
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, permissions
 from rest_framework.serializers import BaseSerializer
@@ -25,7 +27,9 @@ class ProductViewSet(ModelViewSet[Product]):
 
 
 class PublicProductViewSet(ReadOnlyModelViewSet[Product]):
-    queryset = Product.objects.filter(status__in=["available"])
+    queryset = Product.objects.select_related("productavailabilitymodel").filter(
+        status="available",
+    )
     serializer_class = ProductSerializer
     permission_classes = (permissions.AllowAny,)
     filter_backends = [filters.SearchFilter, DjangoFilterBackend]
@@ -33,6 +37,17 @@ class PublicProductViewSet(ReadOnlyModelViewSet[Product]):
     filterset_fields = ["category"]
 
     def get_queryset(self) -> QuerySet[Product]:
-        if self.action == "retrieve":
-            return Product.objects.filter(status__in=["available", "reserved"])
+        if self.action == "list":
+            return (
+                super()
+                .get_queryset()
+                .filter(
+                    Q(productavailabilitymodel__reserved_for_id__isnull=True)
+                    | Q(
+                        productavailabilitymodel__reserved_until__lte=datetime.now(
+                            timezone.utc
+                        )
+                    )
+                )
+            )
         return super().get_queryset()
