@@ -5,30 +5,24 @@ from products.product_availability import ProductAvailability
 from products.product_availability_repository import ProductAvailabilityRepository
 from products.reservation import Reservation
 
+from tests.factories import ProductFactory, UserFactory
+
 pytestmark = [pytest.mark.django_db(transaction=True)]
 
 
-PRODUCT_ID = 1
+def test_product_availability_repository() -> None:
+    product = ProductFactory()
+    user = UserFactory()
 
-
-@pytest.mark.parametrize(
-    "product_availability",
-    [
-        ProductAvailability(product_id=PRODUCT_ID, reservation=Reservation.empty()),
-        ProductAvailability(
-            product_id=PRODUCT_ID,
-            reservation=Reservation(
-                1, datetime.now(tz=timezone.utc) + timedelta(days=2)
-            ),
+    product_availability = ProductAvailability(
+        product_id=product.id,
+        reservation=Reservation(
+            user.id, datetime.now(tz=timezone.utc) + timedelta(days=2)
         ),
-    ],
-)
-def test_product_availability_repository(
-    product_availability: ProductAvailability,
-) -> None:
+    )
     repository = ProductAvailabilityRepository()
 
     repository.save(product_availability)
 
-    saved = repository.get(PRODUCT_ID)
+    saved = repository.get(product.id)
     assert vars(saved) == vars(product_availability)

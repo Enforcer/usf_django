@@ -1,5 +1,6 @@
 import factory  # type: ignore
 from django.conf import settings
+from djmoney.money import Money
 from factory.django import DjangoModelFactory  # type: ignore
 
 
@@ -18,3 +19,14 @@ class CategoryFactory(DjangoModelFactory):  # type: ignore
 
     name = factory.Faker("word")
     created_by = factory.SubFactory(UserFactory)
+
+
+class ProductFactory(DjangoModelFactory):  # type: ignore
+    class Meta:
+        model = "products.Product"
+
+    name = factory.Faker("word")
+    created_by = factory.SubFactory(UserFactory)
+    price = Money(10, "USD")
+    category = factory.SubFactory(CategoryFactory)
+    status = "available"

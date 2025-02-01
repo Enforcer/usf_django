@@ -42,6 +42,8 @@ class Product(TimeStampedModel):  # type: ignore[django-manager-missing]
 
 
 class ProductAvailabilityModel(models.Model):
-    product_id = models.IntegerField(primary_key=True)
-    reserved_for = models.IntegerField(null=True, blank=True)
+    product = models.OneToOneField(Product, on_delete=models.CASCADE, primary_key=True)
+    reserved_for = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True
+    )
     reserved_until = models.DateTimeField(null=True, blank=True)
