@@ -1,9 +1,8 @@
 from datetime import datetime
 
+from products.product_id import ProductId
 from products.reservation import Reservation
 from products.user_id import UserId
-
-type ProductId = int
 
 
 class ProductAlreadyReserved(Exception):

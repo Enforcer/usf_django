@@ -1,0 +1,1 @@
+type ProductId = int
