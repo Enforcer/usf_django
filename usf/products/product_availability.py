@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from products.reservation import Reservation
 from products.user_id import UserId
 
 type ProductId = int
@@ -13,27 +14,16 @@ class ProductAvailability:
     def __init__(
         self,
         product_id: ProductId,
-        reserved_for: UserId | None = None,
-        reserved_until: datetime | None = None,
+        reservation: Reservation,
     ) -> None:
         self._product_id = product_id
-        self._reserved_for = reserved_for
-        self._reserved_until = reserved_until
+        self._reservation = reservation
 
     def reserve(self, for_: UserId, until: datetime) -> None:
-        if self._is_free() or self._reserved_for == for_:
-            self._reserved_for = for_
-            self._reserved_until = until
+        if self._reservation.can_reserve(for_):
+            self._reservation = Reservation(for_, until)
         else:
             raise ProductAlreadyReserved
 
-    def _is_free(self) -> bool:
-        return (
-            self._reserved_for is None
-            or self._reserved_until is None
-            or self._reserved_until <= datetime.now()
-        )
-
     def free(self) -> None:
-        self._reserved_for = None
-        self._reserved_until = None
+        self._reservation = Reservation.empty()

@@ -2,12 +2,13 @@ from datetime import datetime, timedelta
 
 import pytest
 from products.product_availability import ProductAlreadyReserved, ProductAvailability
+from products.reservation import Reservation
 from time_machine import travel
 
 
 @pytest.fixture()
 def product_availability() -> ProductAvailability:
-    return ProductAvailability(product_id=1)
+    return ProductAvailability(product_id=1, reservation=Reservation.empty())
 
 
 def test_cannot_reserve_for_another_user_when_reservation_was_made_for_other_person(
