@@ -18,6 +18,14 @@ class ProductAvailability:
         self._product_id = product_id
         self._reservation = reservation
 
+    @property
+    def product_id(self) -> ProductId:
+        return self._product_id
+
+    @property
+    def reservation(self) -> Reservation:
+        return self._reservation
+
     def reserve(self, for_: UserId, until: datetime) -> None:
         if self._reservation.can_reserve(for_):
             self._reservation = Reservation(for_, until)
