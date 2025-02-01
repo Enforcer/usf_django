@@ -50,7 +50,7 @@ def test_bought_product_is_no_longer_available(api_client: APIClient) -> None:
     product_id = find_product.json()[0]["id"]
     price_with_insurance = find_product.json()[0]["price_with_insurance"]
 
-    create_order = api_client.post("/api/orders/", {"product": product_id})
+    create_order = api_client.post("/api/orders/", {"product_id": product_id})
     assert create_order.status_code == 201
     assert create_order.json()["price"] == price_with_insurance
     order_id = create_order.json()["id"]

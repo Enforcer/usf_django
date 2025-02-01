@@ -1,8 +1,8 @@
 from datetime import datetime
 
+from utils.product_id import ProductId
 from utils.user_id import UserId
 
-from products.product_id import ProductId
 from products.reservation import Reservation
 
 

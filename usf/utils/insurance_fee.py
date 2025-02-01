@@ -1,6 +1,6 @@
 from decimal import Decimal
 
-from djmoney.money import Money
+from moneyed import Money
 
 
 def get_insurance_fee(price: Money) -> Money:

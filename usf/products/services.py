@@ -1,11 +1,13 @@
 from datetime import datetime, timedelta, timezone
+from typing import cast
 
+from moneyed import Money
+from utils.product_id import ProductId
 from utils.user_id import UserId
 
 from products.models import Product
 from products.product_availability import ProductAvailability
 from products.product_availability_repository import ProductAvailabilityRepository
-from products.product_id import ProductId
 from products.reservation import Reservation
 
 
@@ -33,3 +35,8 @@ def mark_as_sold(product_id: ProductId) -> None:
     product = Product.objects.get(pk=product_id)
     product.status = "sold"
     product.save()
+
+
+def price_for(product_id: ProductId) -> Money:
+    product = Product.objects.get(pk=product_id)
+    return cast(Money, product.price)
