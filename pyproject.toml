@@ -19,6 +19,8 @@ dependencies = [
     "djoser>=2.3.1",
     "django-filter>=24.3",
     "stripe>=11.5.0",
+    "snowflake-connector-python>=3.13.2",
+    "prometheus-client>=0.21.1",
 ]
 
 [tool.uv]
