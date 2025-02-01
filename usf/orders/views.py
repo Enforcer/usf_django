@@ -28,7 +28,6 @@ class OrderViewSet(ModelViewSet[Order]):
     @action(methods=["post"], detail=True)
     def confirm(self, request: Request, pk: int) -> Response:
         order = self.get_queryset().get(pk=pk)
-        order.status = "confirmed"
         payment_intent = create_payment_intent(order.price)
         payment = Payment(
             amount=order.price,
@@ -37,7 +36,7 @@ class OrderViewSet(ModelViewSet[Order]):
             client_secret=str(payment_intent.client_secret),
         )
         payment.save()
-        order.payment = payment
+        order.confirm(payment.id)
         order.save()
         order.product.status = "reserved"
         order.product.reserved_for = order.created_by
