@@ -9,11 +9,10 @@ fmt:
 .PHONY: lint
 lint:
 	uv run ruff check --fix
-	uv run dmypy run --timeout 3600 -- tests/ usf/
+	PYTHONPATH=usf uv run mypy usf/ tests/
 	uv run lint-imports
-
-.PHONY: qa
-qa: fmt lint
+	# For faster feedback locally use mypy like:
+	# PYTHONPATH=usf uv run dmypy run --timeout 3600 -- tests/ usf/
 
 .PHONY: test
 test:

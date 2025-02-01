@@ -10,6 +10,7 @@ services:
       - ./usf:/app/usf
       - ./tests:/app/tests
       - ./Makefile:/app/Makefile
+      - ./.importlinter:/app/.importlinter
 
   django:
     image: usf

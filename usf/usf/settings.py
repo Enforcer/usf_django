@@ -41,6 +41,13 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "rest_framework",
+    "djoser",
+    "djmoney",
+    "django_filters",
+    "products",
+    "orders",
+    "payments",
 ]
 
 MIDDLEWARE = [
@@ -140,3 +147,16 @@ CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
 CELERY_TIMEZONE = "Europe/Warsaw"
 CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
+
+# Djmoney
+CURRENCIES = ("USD",)
+
+# Stripe
+STRIPE_API_KEY = "sk_test_7mJuPfZsBzc3JkrANrFrcDqC"  # public test key
+
+# Rest framework
+# REST_FRAMEWORK = {
+#     "DEFAULT_PERMISSION_CLASSES": [
+#         "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly"
+#     ]
+# }

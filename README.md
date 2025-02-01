@@ -50,6 +50,18 @@ docker compose run -it shell make migrate
 docker compose run -it shell make test
 ```
 
+**Run formatter**
+
+```bash
+docker compose run -it shell make fmt
+```
+
+**Run linters and type checker**
+
+```bash
+docker compose run -it shell make lint
+```
+
 ### With local installation
 
 **Run dependencies**
@@ -76,4 +88,16 @@ make migrate
 
 ```bash
 make test
+```
+
+**Run formatter**
+
+```bash
+make fmt
+```
+
+**Run linters and type checker**
+
+```bash
+make lint
 ```
