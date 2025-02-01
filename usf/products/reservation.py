@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Any, Self
 
-from products.user_id import UserId
+from utils.user_id import UserId
 
 
 class Reservation:

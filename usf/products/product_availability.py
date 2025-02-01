@@ -1,8 +1,9 @@
 from datetime import datetime
 
+from utils.user_id import UserId
+
 from products.product_id import ProductId
 from products.reservation import Reservation
-from products.user_id import UserId
 
 
 class ProductAlreadyReserved(Exception):
