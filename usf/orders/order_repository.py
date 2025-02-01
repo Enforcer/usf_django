@@ -11,6 +11,7 @@ from orders.order_id import OrderId
 class OrderRepository:
     def create(self, product_id: ProductId, user_id: UserId, price: Money) -> Order:
         model = OrderModel.objects.create(
+            status=Status.PREVIEW,
             product_id=product_id,
             price=price.amount,
             price_currency=price.currency.code,
