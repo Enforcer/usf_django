@@ -31,3 +31,6 @@ class ProductAvailabilityRepository:
             reserved_until=product_availability.reservation.reserved_until,
         )
         model.save()
+
+    def delete(self, product_id: ProductId) -> None:
+        ProductAvailabilityModel.objects.filter(pk=product_id).delete()

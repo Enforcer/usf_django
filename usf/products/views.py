@@ -1,10 +1,12 @@
 from django.db.models import QuerySet
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, permissions
+from rest_framework.serializers import BaseSerializer
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
 from products.models import Product
 from products.serializers import ProductSerializer
+from products.services import register_new_product
 
 
 class ProductViewSet(ModelViewSet[Product]):
@@ -16,6 +18,10 @@ class ProductViewSet(ModelViewSet[Product]):
         if self.request.user.is_authenticated:
             return Product.objects.filter(created_by=self.request.user)
         return Product.objects.none()
+
+    def perform_create(self, serializer: BaseSerializer[Product]) -> None:
+        product = serializer.save()
+        register_new_product(product.id)
 
 
 class PublicProductViewSet(ReadOnlyModelViewSet[Product]):
