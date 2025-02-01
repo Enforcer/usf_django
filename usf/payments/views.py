@@ -1,5 +1,5 @@
 from django.db.models import QuerySet
-from orders.models import Order
+from orders.services import mark_as_paid
 from requests import Request
 from rest_framework import permissions
 from rest_framework.response import Response
@@ -7,8 +7,8 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from payments.models import Payment
+from payments.payment_intents import create_payment_intent
 from payments.serializers import PaymentSerializer
-from payments.utils import create_payment_intent
 
 
 class PaymentViewSet(ReadOnlyModelViewSet[Payment]):
@@ -28,11 +28,7 @@ class WebhookView(APIView):
         if event["type"] == "payment_intent.succeeded":
             payment_intent = event["data"]["object"]
             payment = Payment.objects.get(payment_intent_id=payment_intent["id"])
-            order = Order.objects.get(payment=payment)
-            order.status = "paid"
-            order.save()
-            order.product.status = "sold"
-            order.product.save()
+            mark_as_paid(payment.id)
             return Response(status=200)
         elif event["type"] == "payment_intent.payment_failed":
             payment_intent = event["data"]["object"]

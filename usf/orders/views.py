@@ -1,10 +1,8 @@
-from datetime import timedelta
 from typing import Type
 
 from django.db.models import QuerySet
-from django.utils import timezone
-from payments.models import Payment
-from payments.utils import create_payment_intent
+from payments.services import start_payment
+from products.services import reserve_product
 from rest_framework import permissions, serializers
 from rest_framework.decorators import action
 from rest_framework.request import Request
@@ -28,20 +26,10 @@ class OrderViewSet(ModelViewSet[Order]):
     @action(methods=["post"], detail=True)
     def confirm(self, request: Request, pk: int) -> Response:
         order = self.get_queryset().get(pk=pk)
-        payment_intent = create_payment_intent(order.price)
-        payment = Payment(
-            amount=order.price,
-            created_by=order.created_by,
-            payment_intent_id=payment_intent.id,
-            client_secret=str(payment_intent.client_secret),
-        )
-        payment.save()
-        order.confirm(payment.id)
+        payment_id = start_payment(order.price, order.created_by_id)
+        order.confirm(payment_id)
         order.save()
-        order.product.status = "reserved"
-        order.product.reserved_for = order.created_by
-        order.product.reserved_until = timezone.now() + timedelta(days=2)
-        order.product.save()
+        reserve_product(order.product_id, order.created_by_id)
         serializer = self.get_serializer(order)
         return Response(serializer.data)
 

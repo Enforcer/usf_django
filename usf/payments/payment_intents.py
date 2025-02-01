@@ -1,5 +1,5 @@
 import stripe
-from djmoney.money import Money
+from moneyed import Money
 from stripe import PaymentIntent
 
 
