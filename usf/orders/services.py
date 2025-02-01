@@ -31,6 +31,10 @@ def confirm(order_id: OrderId) -> OrderDto:
     return _to_dto(order)
 
 
+def get_all_orders(user_id: UserId) -> list[OrderDto]:
+    return [_to_dto(order) for order in Order.objects.filter(created_by_id=user_id)]
+
+
 def mark_as_paid(payment_id: PaymentId) -> None:
     order = Order.objects.get(payment_id=payment_id)
     order.status = "paid"

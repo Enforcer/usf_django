@@ -88,3 +88,8 @@ def test_bought_product_is_no_longer_available(api_client: APIClient) -> None:
         f"/api/public/products/{product_id}/"
     )
     assert find_product_by_id_after_payment.status_code == 404, "Item was found!"
+
+    user_orders = api_client.get("/api/orders/")
+    assert user_orders.status_code == 200
+    assert len(user_orders.json()) == 1
+    assert user_orders.json()[0]["status"] == "paid"

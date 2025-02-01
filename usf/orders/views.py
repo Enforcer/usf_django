@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 
 from orders.serializers import CreateOrderSerializer, OrderDtoSerializer
-from orders.services import confirm, create_order_preview
+from orders.services import confirm, create_order_preview, get_all_orders
 
 
 class OrderViewSet(ViewSet):
@@ -27,4 +27,10 @@ class OrderViewSet(ViewSet):
     def confirm(self, request: Request, pk: int) -> Response:
         order = confirm(order_id=pk)
         serializer = OrderDtoSerializer(order)
+        return Response(serializer.data)
+
+    def list(self, request: Request) -> Response:
+        user_id = request.user.id
+        orders = get_all_orders(user_id)
+        serializer = OrderDtoSerializer(orders, many=True)  # type: ignore[arg-type]
         return Response(serializer.data)
