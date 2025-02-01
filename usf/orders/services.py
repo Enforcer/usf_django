@@ -5,40 +5,45 @@ from utils.payment_id import PaymentId
 from utils.product_id import ProductId
 from utils.user_id import UserId
 
-from orders.models import Order
+from orders.order import Order
 from orders.order_dto import OrderDto
 from orders.order_id import OrderId
+from orders.order_repository import OrderRepository
 
 
 def create_order_preview(product_id: ProductId, user_id: UserId) -> OrderDto:
     product_price = price_for(product_id)
     price_with_insurance = product_price + get_insurance_fee(product_price)
-    order = Order.objects.create(
+    repository = OrderRepository()
+    order = repository.create(
         product_id=product_id,
-        price=price_with_insurance.amount,
-        price_currency=price_with_insurance.currency.code,
-        created_by_id=user_id,
+        user_id=user_id,
+        price=price_with_insurance,
     )
     return _to_dto(order)
 
 
 def confirm(order_id: OrderId) -> OrderDto:
-    order = Order.objects.get(pk=order_id)
-    payment_id = start_payment(order.price, order.created_by_id)
+    repository = OrderRepository()
+    order = repository.get(order_id)
+    payment_id = start_payment(order.price, order.user_id)
     order.confirm(payment_id)
-    order.save()
-    reserve_product(order.product_id, order.created_by_id)
+    repository.save(order)
+    reserve_product(order.product_id, order.user_id)
     return _to_dto(order)
 
 
 def get_all_orders(user_id: UserId) -> list[OrderDto]:
-    return [_to_dto(order) for order in Order.objects.filter(created_by_id=user_id)]
+    repository = OrderRepository()
+    return [_to_dto(order) for order in repository.get_all(user_id)]
 
 
 def mark_as_paid(payment_id: PaymentId) -> None:
-    order = Order.objects.get(payment_id=payment_id)
-    order.status = "paid"
-    order.save()
+    repository = OrderRepository()
+    order = repository.get_by_payment_id(payment_id)
+    order.mark_as_paid()
+    repository.save(order)
+
     mark_as_sold(order.product_id)
 
 

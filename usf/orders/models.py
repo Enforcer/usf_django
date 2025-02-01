@@ -2,8 +2,6 @@ from django.db import models
 from djmoney.models.fields import MoneyField
 from utils.models import TimeStampedModel
 
-type PaymentId = int
-
 
 class Order(TimeStampedModel):  # type: ignore[django-manager-missing]
     product = models.ForeignKey("products.Product", on_delete=models.CASCADE)
@@ -22,7 +20,3 @@ class Order(TimeStampedModel):  # type: ignore[django-manager-missing]
     payment = models.ForeignKey(
         "payments.Payment", on_delete=models.SET_NULL, null=True
     )
-
-    def confirm(self, payment_id: PaymentId) -> None:
-        self.payment_id = payment_id
-        self.status = "confirmed"
