@@ -69,7 +69,7 @@ def test_bought_product_is_no_longer_available(api_client: APIClient) -> None:
     assert find_product_by_id.json()["id"] == product_id
     assert find_product_by_id.json()["effective_status"] == "reserved"
 
-    payment_id = confirm_order.json()["payment"]
+    payment_id = confirm_order.json()["payment_id"]
     payment = api_client.get(f"/api/payments/{payment_id}/")
     assert payment.status_code == 200
     assert payment.json()["amount"] == price_with_insurance
