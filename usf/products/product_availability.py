@@ -1,0 +1,2 @@
+class ProductAvailability:
+    pass
