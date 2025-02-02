@@ -1,14 +1,15 @@
 from django.db.models import QuerySet
-from orders.public import OrdersFacade
 from requests import Request
 from rest_framework import permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
+from payments.events import PaymentFinalized
 from payments.models import Payment
 from payments.payment_intents import create_payment_intent
 from payments.serializers import PaymentSerializer
+from payments.signals import payment_finalized
 
 
 class PaymentViewSet(ReadOnlyModelViewSet[Payment]):
@@ -28,7 +29,7 @@ class WebhookView(APIView):
         if event["type"] == "payment_intent.succeeded":
             payment_intent = event["data"]["object"]
             payment = Payment.objects.get(payment_intent_id=payment_intent["id"])
-            OrdersFacade().mark_as_paid(payment.id)
+            payment_finalized.publish(PaymentFinalized(payment.id))
             return Response(status=200)
         elif event["type"] == "payment_intent.payment_failed":
             payment_intent = event["data"]["object"]
