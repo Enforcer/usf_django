@@ -1,3 +1,4 @@
+from container import container
 from insurance.public import get_insurance_fee
 from lagom import magic_bind_to_container
 from payments.public import start_payment
@@ -8,7 +9,6 @@ from shared.user_id import UserId
 
 from orders.app.order_dto import OrderDto
 from orders.app.order_repository import OrderRepository
-from orders.container import container
 from orders.domain.order import Order
 from orders.domain.order_id import OrderId
 

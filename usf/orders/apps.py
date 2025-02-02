@@ -1,8 +1,7 @@
 from typing import Any
 
+from container import container
 from django.apps import AppConfig
-
-from orders.container import container
 
 
 class OrdersConfig(AppConfig):
