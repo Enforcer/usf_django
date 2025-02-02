@@ -1,8 +1,7 @@
 [importlinter]
 root_packages =
-    usf.orders
-    usf.payments
-    usf.products
-    usf.usf
-    usf.utils
-
+    orders
+    payments
+    products
+    usf
+    utils
