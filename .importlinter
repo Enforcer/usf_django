@@ -1,7 +1,16 @@
 [importlinter]
+include_external_packages = True
 root_packages =
     orders
     payments
     products
     usf
     utils
+
+[importlinter:contract:orders-ca]
+name = Domain must not import App
+type = forbidden
+source_modules =
+    orders.domain
+forbidden_modules =
+    orders.app
