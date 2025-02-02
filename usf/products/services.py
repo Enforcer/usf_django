@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timezone
 from typing import cast
 
 from container import container
@@ -28,9 +28,9 @@ def reserve_product(
 ) -> None:
     repository = ProductAvailabilityRepository()
     product_availability = repository.get(product_id)
-    product_availability.reserve(
-        for_, datetime.now(tz=timezone.utc) + timedelta(days=2)
-    )
+    reservation_policy = policy_factory.policy_for(user_id=for_)
+    reservation_time = reservation_policy()
+    product_availability.reserve(for_, datetime.now(tz=timezone.utc) + reservation_time)
     repository.save(product_availability)
 
 
