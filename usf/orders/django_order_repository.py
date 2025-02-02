@@ -8,7 +8,7 @@ from orders.order import Order, Status
 from orders.order_id import OrderId
 
 
-class OrderRepository:
+class DjangoOrderRepository:
     def create(self, product_id: ProductId, user_id: UserId, price: Money) -> Order:
         model = OrderModel.objects.create(
             status=Status.PREVIEW,
