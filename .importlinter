@@ -21,12 +21,10 @@ layers =
 name = Other components can only use Orders API
 type = forbidden
 source_modules =
-    payments
     products
 forbidden_modules =
     orders
 ignore_imports =
-    payments.** -> orders.public
     products.** -> orders.public
 unmatched_ignore_imports_alerting = none
 
@@ -42,6 +40,14 @@ ignore_imports =
     orders.** -> payments.public
     products.** -> payments.public
 unmatched_ignore_imports_alerting = none
+
+[importlinter:contract:payments_should_not_use_orders]
+name = Payments should not depend on Orders
+type = forbidden
+source_modules =
+    payments
+forbidden_modules =
+    orders
 
 [importlinter:contract:products_api]
 name = Other components can only use Products API
