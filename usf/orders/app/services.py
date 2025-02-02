@@ -1,3 +1,4 @@
+from lagom import magic_bind_to_container
 from payments.services import start_payment
 from products.services import mark_as_sold, price_for, reserve_product
 from utils.insurance_fee import get_insurance_fee
@@ -7,10 +8,12 @@ from utils.user_id import UserId
 
 from orders.app.order_dto import OrderDto
 from orders.app.order_repository import OrderRepository
+from orders.container import container
 from orders.domain.order import Order
 from orders.domain.order_id import OrderId
 
 
+@magic_bind_to_container(container)
 def create_order_preview(
     product_id: ProductId, user_id: UserId, repository: OrderRepository
 ) -> OrderDto:
@@ -24,6 +27,7 @@ def create_order_preview(
     return _to_dto(order)
 
 
+@magic_bind_to_container(container)
 def confirm(order_id: OrderId, repository: OrderRepository) -> OrderDto:
     order = repository.get(order_id)
     payment_id = start_payment(order.price, order.user_id)
@@ -33,10 +37,12 @@ def confirm(order_id: OrderId, repository: OrderRepository) -> OrderDto:
     return _to_dto(order)
 
 
+@magic_bind_to_container(container)
 def get_all_orders(user_id: UserId, repository: OrderRepository) -> list[OrderDto]:
     return [_to_dto(order) for order in repository.get_all(user_id)]
 
 
+@magic_bind_to_container(container)
 def mark_as_paid(payment_id: PaymentId, repository: OrderRepository) -> None:
     order = repository.get_by_payment_id(payment_id)
     order.mark_as_paid()
