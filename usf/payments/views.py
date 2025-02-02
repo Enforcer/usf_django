@@ -1,5 +1,5 @@
 from django.db.models import QuerySet
-from orders.app.services import mark_as_paid
+from orders.app.facade import OrdersFacade
 from requests import Request
 from rest_framework import permissions
 from rest_framework.response import Response
@@ -28,7 +28,7 @@ class WebhookView(APIView):
         if event["type"] == "payment_intent.succeeded":
             payment_intent = event["data"]["object"]
             payment = Payment.objects.get(payment_intent_id=payment_intent["id"])
-            mark_as_paid(payment.id)
+            OrdersFacade().mark_as_paid(payment.id)
             return Response(status=200)
         elif event["type"] == "payment_intent.payment_failed":
             payment_intent = event["data"]["object"]
