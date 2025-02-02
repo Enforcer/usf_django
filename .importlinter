@@ -8,9 +8,9 @@ root_packages =
     utils
 
 [importlinter:contract:orders-ca]
-name = Domain must not import App
-type = forbidden
-source_modules =
-    orders.domain
-forbidden_modules =
+name = CA layers
+type = layers
+layers =
+    orders.migrations : orders.apps : orders.django_order_repository : orders.models : orders.serializers : orders.urls : orders.views
     orders.app
+    orders.domain
