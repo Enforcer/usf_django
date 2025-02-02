@@ -1,6 +1,6 @@
 import pytest
 from djmoney.money import Money
-from utils.insurance_fee import get_insurance_fee
+from insurance.services import get_insurance_fee
 
 
 @pytest.mark.parametrize(

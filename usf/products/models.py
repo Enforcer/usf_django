@@ -2,7 +2,7 @@ from django.conf import settings
 from django.db import models
 from djmoney.models.fields import MoneyField
 from djmoney.models.validators import MaxMoneyValidator, MinMoneyValidator
-from utils.models import TimeStampedModel
+from ext.models import TimeStampedModel
 
 
 class Category(TimeStampedModel):  # type: ignore[django-manager-missing]

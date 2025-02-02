@@ -1,9 +1,9 @@
 from enum import StrEnum
 
 from moneyed import Money
-from utils.payment_id import PaymentId
-from utils.product_id import ProductId
-from utils.user_id import UserId
+from shared.payment_id import PaymentId
+from shared.product_id import ProductId
+from shared.user_id import UserId
 
 from orders.domain.order_id import OrderId
 

@@ -1,7 +1,7 @@
 from datetime import datetime
 
-from utils.product_id import ProductId
-from utils.user_id import UserId
+from shared.product_id import ProductId
+from shared.user_id import UserId
 
 from products.reservation import Reservation
 

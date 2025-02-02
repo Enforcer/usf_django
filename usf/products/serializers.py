@@ -1,7 +1,7 @@
 from typing import Any
 
+from insurance import services as insurance_services
 from rest_framework import serializers
-from utils import insurance_fee as insurance_fee_utils
 
 from products.models import Product
 from products.product_availability_repository import ProductAvailabilityRepository
@@ -28,10 +28,10 @@ class ProductSerializer(serializers.ModelSerializer[Product]):
         ]
 
     def get_insurance_fee(self, obj: Product) -> str:
-        return str(insurance_fee_utils.get_insurance_fee(obj.price).amount)
+        return str(insurance_services.get_insurance_fee(obj.price).amount)
 
     def get_price_with_insurance(self, obj: Product) -> str:
-        price_with_insurance = obj.price + insurance_fee_utils.get_insurance_fee(
+        price_with_insurance = obj.price + insurance_services.get_insurance_fee(
             obj.price
         )
         return str(price_with_insurance.amount)

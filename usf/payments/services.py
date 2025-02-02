@@ -1,6 +1,6 @@
 from moneyed import Money
-from utils.payment_id import PaymentId
-from utils.user_id import UserId
+from shared.payment_id import PaymentId
+from shared.user_id import UserId
 
 from payments.models import Payment
 from payments.payment_intents import create_payment_intent

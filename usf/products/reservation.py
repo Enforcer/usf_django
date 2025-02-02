@@ -1,7 +1,7 @@
 from datetime import datetime, timezone
 from typing import Any, Self
 
-from utils.user_id import UserId
+from shared.user_id import UserId
 
 
 class Reservation:

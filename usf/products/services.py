@@ -2,8 +2,8 @@ from datetime import datetime, timedelta, timezone
 from typing import cast
 
 from moneyed import Money
-from utils.product_id import ProductId
-from utils.user_id import UserId
+from shared.product_id import ProductId
+from shared.user_id import UserId
 
 from products.models import Product
 from products.product_availability import ProductAvailability

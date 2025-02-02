@@ -1,4 +1,4 @@
-from utils.product_id import ProductId
+from shared.product_id import ProductId
 
 from products.models import ProductAvailabilityModel
 from products.product_availability import ProductAvailability

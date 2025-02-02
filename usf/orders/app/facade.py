@@ -1,10 +1,10 @@
+from insurance.services import get_insurance_fee
 from lagom import magic_bind_to_container
 from payments.services import start_payment
 from products.services import mark_as_sold, price_for, reserve_product
-from utils.insurance_fee import get_insurance_fee
-from utils.payment_id import PaymentId
-from utils.product_id import ProductId
-from utils.user_id import UserId
+from shared.payment_id import PaymentId
+from shared.product_id import ProductId
+from shared.user_id import UserId
 
 from orders.app.order_dto import OrderDto
 from orders.app.order_repository import OrderRepository

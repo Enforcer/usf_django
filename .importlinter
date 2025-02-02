@@ -5,7 +5,9 @@ root_packages =
     payments
     products
     usf
-    utils
+    insurance
+    shared
+    ext
 
 [importlinter:contract:orders-ca]
 name = CA layers

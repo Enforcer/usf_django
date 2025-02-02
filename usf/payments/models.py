@@ -1,6 +1,6 @@
 from django.db import models
 from djmoney.models.fields import MoneyField
-from utils.models import TimeStampedModel
+from ext.models import TimeStampedModel
 
 
 class Payment(TimeStampedModel):  # type: ignore[django-manager-missing]
