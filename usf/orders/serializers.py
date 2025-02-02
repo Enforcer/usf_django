@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from orders.order_dto import OrderDto
+from orders.app.order_dto import OrderDto
 
 
 class CreateOrderSerializer(serializers.Serializer):  # type: ignore[type-arg]

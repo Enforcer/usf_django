@@ -3,12 +3,13 @@ from utils.payment_id import PaymentId
 from utils.product_id import ProductId
 from utils.user_id import UserId
 
+from orders.app.order_repository import OrderRepository
+from orders.domain.order import Order, Status
+from orders.domain.order_id import OrderId
 from orders.models import Order as OrderModel
-from orders.order import Order, Status
-from orders.order_id import OrderId
 
 
-class DjangoOrderRepository:
+class DjangoOrderRepository(OrderRepository):
     def create(self, product_id: ProductId, user_id: UserId, price: Money) -> Order:
         model = OrderModel.objects.create(
             status=Status.PREVIEW,

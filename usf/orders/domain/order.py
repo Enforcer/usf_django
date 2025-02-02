@@ -5,7 +5,7 @@ from utils.payment_id import PaymentId
 from utils.product_id import ProductId
 from utils.user_id import UserId
 
-from orders.order_id import OrderId
+from orders.domain.order_id import OrderId
 
 
 class Status(StrEnum):

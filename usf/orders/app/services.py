@@ -5,10 +5,10 @@ from utils.payment_id import PaymentId
 from utils.product_id import ProductId
 from utils.user_id import UserId
 
+from orders.app.order_dto import OrderDto
 from orders.django_order_repository import DjangoOrderRepository
-from orders.order import Order
-from orders.order_dto import OrderDto
-from orders.order_id import OrderId
+from orders.domain.order import Order
+from orders.domain.order_id import OrderId
 
 
 def create_order_preview(product_id: ProductId, user_id: UserId) -> OrderDto:

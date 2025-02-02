@@ -4,7 +4,7 @@ from moneyed import Money
 from utils.payment_id import PaymentId
 from utils.product_id import ProductId
 
-from orders.order_id import OrderId
+from orders.domain.order_id import OrderId
 
 
 @dataclass(frozen=True)

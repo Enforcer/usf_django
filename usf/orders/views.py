@@ -6,8 +6,8 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 
+from orders.app.services import confirm, create_order_preview, get_all_orders
 from orders.serializers import CreateOrderSerializer, OrderDtoSerializer
-from orders.services import confirm, create_order_preview, get_all_orders
 
 
 class OrderViewSet(ViewSet):

@@ -1,5 +1,5 @@
 from django.db.models import QuerySet
-from orders.services import mark_as_paid
+from orders.app.services import mark_as_paid
 from requests import Request
 from rest_framework import permissions
 from rest_framework.response import Response
