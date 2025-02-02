@@ -1,5 +1,5 @@
 from django.db.models import QuerySet
-from orders.app.facade import OrdersFacade
+from orders.public import OrdersFacade
 from requests import Request
 from rest_framework import permissions
 from rest_framework.response import Response

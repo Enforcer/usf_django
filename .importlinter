@@ -16,3 +16,57 @@ layers =
     orders.migrations : orders.apps : orders.django_order_repository : orders.models : orders.serializers : orders.urls : orders.views
     orders.app
     orders.domain
+
+[importlinter:contract:orders_api]
+name = Other components can only use Orders API
+type = forbidden
+source_modules =
+    payments
+    products
+forbidden_modules =
+    orders
+ignore_imports =
+    payments.** -> orders.public
+    products.** -> orders.public
+unmatched_ignore_imports_alerting = none
+
+[importlinter:contract:payments_api]
+name = Other components can only use Payments API
+type = forbidden
+source_modules =
+    orders
+    products
+forbidden_modules =
+    payments
+ignore_imports =
+    orders.** -> payments.public
+    products.** -> payments.public
+unmatched_ignore_imports_alerting = none
+
+[importlinter:contract:products_api]
+name = Other components can only use Products API
+type = forbidden
+source_modules =
+    orders
+    payments
+forbidden_modules =
+    products
+ignore_imports =
+    orders.** -> products.public
+    payments.** -> products.public
+unmatched_ignore_imports_alerting = none
+
+[importlinter:contract:insurance_api]
+name = Other components can only use Insurance API
+type = forbidden
+source_modules =
+    orders
+    payments
+    products
+forbidden_modules =
+    insurance
+ignore_imports =
+    orders.** -> insurance.public
+    payments.** -> insurance.public
+    products.** -> insurance.public
+unmatched_ignore_imports_alerting = none

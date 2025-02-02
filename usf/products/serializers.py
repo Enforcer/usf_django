@@ -1,6 +1,6 @@
 from typing import Any
 
-from insurance import services as insurance_services
+from insurance import public as insurance_services
 from rest_framework import serializers
 
 from products.models import Product

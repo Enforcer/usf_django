@@ -1,7 +1,7 @@
-from insurance.services import get_insurance_fee
+from insurance.public import get_insurance_fee
 from lagom import magic_bind_to_container
-from payments.services import start_payment
-from products.services import mark_as_sold, price_for, reserve_product
+from payments.public import start_payment
+from products.public import mark_as_sold, price_for, reserve_product
 from shared.payment_id import PaymentId
 from shared.product_id import ProductId
 from shared.user_id import UserId
