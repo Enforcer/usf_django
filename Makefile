@@ -14,6 +14,12 @@ lint:
 	# For faster feedback locally use mypy like:
 	# PYTHONPATH=usf uv run dmypy run --timeout 3600 -- tests/ usf/
 
+.PHONY: lintl
+lintl:  # lint locally (outside container) with mypy daemon
+	uv run ruff check --fix
+	PYTHONPATH=usf uv run dmypy run --timeout 3600 -- tests/ usf/
+	PYTHONPATH=usf uv run lint-imports
+
 .PHONY: test
 test:
 	uv run pytest tests/
