@@ -17,8 +17,9 @@ class OrdersConfig(AppConfig):
         from payments.public import PaymentFinalized, payment_finalized
 
         from orders.tasks import mark_as_paid_task
+        from outbox.services import put_in_outbox
 
         def payment_finalized_handler(event: PaymentFinalized, **kwargs: Any) -> None:
-            mark_as_paid_task.delay(payment_id=event.payment_id)
+            put_in_outbox(mark_as_paid_task, payment_id=event.payment_id)
 
         payment_finalized.subscribe(payment_finalized_handler)
