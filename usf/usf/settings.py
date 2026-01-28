@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "orders",
     "payments",
     "users",
+    "outbox",
 ]
 
 MIDDLEWARE = [

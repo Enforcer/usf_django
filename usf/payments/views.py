@@ -1,3 +1,4 @@
+from django.db import transaction
 from django.db.models import QuerySet
 from requests import Request
 from rest_framework import permissions
@@ -28,8 +29,10 @@ class WebhookView(APIView):
         event = request.data
         if event["type"] == "payment_intent.succeeded":
             payment_intent = event["data"]["object"]
-            payment = Payment.objects.get(payment_intent_id=payment_intent["id"])
-            payment_finalized.publish(PaymentFinalized(payment.id))
+            with transaction.atomic():
+                payment = Payment.objects.get(payment_intent_id=payment_intent["id"])
+                payment.completed = True
+                payment_finalized.publish(PaymentFinalized(payment.id))
             return Response(status=200)
         elif event["type"] == "payment_intent.payment_failed":
             payment_intent = event["data"]["object"]

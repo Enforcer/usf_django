@@ -16,10 +16,9 @@ class OrdersConfig(AppConfig):
 
         from payments.public import PaymentFinalized, payment_finalized
 
-        from orders.app.facade import OrdersFacade
+        from orders.tasks import mark_as_paid_task
 
         def payment_finalized_handler(event: PaymentFinalized, **kwargs: Any) -> None:
-            facade = OrdersFacade()
-            facade.mark_as_paid(event.payment_id)
+            mark_as_paid_task.delay(payment_id=event.payment_id)
 
         payment_finalized.subscribe(payment_finalized_handler)

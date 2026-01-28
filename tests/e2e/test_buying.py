@@ -1,8 +1,11 @@
+from time import sleep
 from unittest.mock import Mock, patch, seal
 
 import pytest
 import stripe
+from celery import Celery
 from django.test import override_settings
+from outbox.services import flush_outbox
 from rest_framework.test import APIClient
 
 from tests.factories import CategoryFactory
@@ -17,8 +20,30 @@ SELLER_USERNAME = "seller"
 SELLER_PASSWORD = "Pwd123!SLR"  # noqa: S105
 
 
+pytest_plugins = ("celery.contrib.pytest",)
+
+
+@pytest.fixture(scope="session")
+def celery_config():
+    return {
+        "broker_url": "redis://localhost:6379/15",
+        "result_backend": "redis://localhost:6379/15",
+        "task_always_eager": False,
+    }
+
+
+@pytest.fixture()
+def celery_app(celery_app):
+    from usf.celery import app as django_celery_app
+
+    return django_celery_app
+
+
+@pytest.mark.usefixtures("celery_worker")
 @override_settings(PASSWORD_HASHERS=["django.contrib.auth.hashers.MD5PasswordHasher"])
-def test_bought_product_is_no_longer_available(api_client: APIClient) -> None:
+def test_bought_product_is_no_longer_available(
+    api_client: APIClient, celery_app: Celery
+) -> None:
     register_buyer = api_client.post(
         "/auth/users/", {"username": BUYER_USERNAME, "password": BUYER_PASSWORD}
     )
@@ -84,6 +109,8 @@ def test_bought_product_is_no_longer_available(api_client: APIClient) -> None:
     )
     assert webhook.status_code == 200
 
+    flush_outbox(celery_app)
+    _wait_for_all_tasks()
     find_product_by_id_after_payment = api_client.get(
         f"/api/public/products/{product_id}/"
     )
@@ -93,3 +120,7 @@ def test_bought_product_is_no_longer_available(api_client: APIClient) -> None:
     assert user_orders.status_code == 200
     assert len(user_orders.json()) == 1
     assert user_orders.json()[0]["status"] == "paid"
+
+
+def _wait_for_all_tasks() -> None:
+    sleep(2)
